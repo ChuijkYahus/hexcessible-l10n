@@ -11,7 +11,7 @@ import kotlin.Pair;
 import net.minecraft.client.gui.DrawContext;
 
 public sealed class DrawState
-        permits Idling, MouseDrawing, KeyboardDrawing, AutoCompleting {
+        permits Idling, MouseDrawing, KeyboardDrawing, AutoCompleting, AliasChanging {
 
     protected CastRef castref;
     protected DrawState nextState = null;
@@ -67,9 +67,11 @@ public sealed class DrawState
             case BETWEENPATTERNS ->
                 List.of(Idling.class,
                         KeyboardDrawing.class,
+                        AliasChanging.class,
                         AutoCompleting.class); // mouse released while autocompleting
             case JUSTSTARTED ->
                 List.of(MouseDrawing.class, // started -> drawing -> undone
+                        AliasChanging.class,
                         AutoCompleting.class);
             case DRAWING ->
                 List.of(MouseDrawing.class);

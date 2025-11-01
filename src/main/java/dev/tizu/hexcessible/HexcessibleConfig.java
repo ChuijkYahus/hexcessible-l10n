@@ -1,6 +1,7 @@
 package dev.tizu.hexcessible;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +48,9 @@ public class HexcessibleConfig implements ConfigData {
     @ConfigEntry.Gui.Excluded
     /** Bit of a horrible format: <worldctx> <patternid> <sig> */
     public List<String> knownWorldPatterns = List.of();
+    @ConfigEntry.Gui.Excluded
+    /** <patternid>: <renamed> */
+    public Map<String, String> patternAliases = Map.of();
 
     public static class Idle {
         @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
@@ -131,6 +135,7 @@ public class HexcessibleConfig implements ConfigData {
     }
 
     public void markDirty() {
+        Hexcessible.LOGGER.info("Marked config dirty, saving...");
         holder.save();
     }
 }

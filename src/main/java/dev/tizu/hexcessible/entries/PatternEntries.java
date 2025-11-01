@@ -89,7 +89,7 @@ public class PatternEntries {
         var result = new ArrayList<>(entries.stream()
                 .map(e -> {
                     var score = e.z * 10_000; // base score based on z index
-                    score += Utils.fluffySearch(query, e.name) * 3; // important!
+                    score += Utils.fluffySearch(query, e.name()) * 3; // important!
                     score += Utils.fluffySearch(query, e.id.toString()
                             .replaceAll("[:_/]", " "));
                     return Map.entry(e, score);
@@ -140,20 +140,38 @@ public class PatternEntries {
         Hexcessible.LOGGER.info("Learned per-world pattern {}", entry.id());
     }
 
-    public static record Entry(Identifier id, String name, Supplier<Boolean> checkLock,
+    public static record Entry(Identifier id, String rawName, Supplier<Boolean> checkLock,
             HexDir dir, List<List<HexAngle>> sig, List<BookEntries.Entry> impls, int z) {
         public boolean locked() {
             return checkLock.get();
         }
 
+        public String name() {
+            if (isAliased())
+                return Hexcessible.cfg().patternAliases.get(id.toString());
+            return rawName;
+        }
+
+        public boolean isAliased() {
+            return Hexcessible.cfg().patternAliases.containsKey(id.toString());
+        }
+
+        public String toSignature() {
+            var sb = new StringBuilder();
+            for (var s : sig)
+                sb.append("<").append(dir).append(",")
+                        .append(Utils.angle(s).toLowerCase())
+                        .append(">");
+            return sb.toString();
+        }
+
         public String toString() {
-            StringBuilder sb = new StringBuilder();
-            if (Hexcessible.cfg().tooltipRenderSigs)
-                for (var s : sig)
-                    sb.append("<").append(dir).append(",")
-                            .append(Utils.angle(s).toLowerCase())
-                            .append("> ");
-            sb.append(name);
+            var sb = new StringBuilder();
+            if (Hexcessible.cfg().tooltipRenderSigs) {
+                sb.append(toSignature());
+                sb.append(" ");
+            }
+            sb.append(name());
             return sb.toString();
         }
 

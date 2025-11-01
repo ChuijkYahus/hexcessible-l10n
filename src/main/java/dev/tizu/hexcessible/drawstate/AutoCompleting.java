@@ -15,6 +15,7 @@ import dev.tizu.hexcessible.entries.PatternEntries;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -98,6 +99,11 @@ public final class AutoCompleting extends DrawState {
                 break;
             case GLFW.GLFW_KEY_RIGHT:
                 offsetChosenDoc(1);
+                break;
+            case GLFW.GLFW_KEY_E, GLFW.GLFW_KEY_F2:
+                if (keyCode == GLFW.GLFW_KEY_E && !ctrl)
+                    return;
+                nextState = new AliasChanging(castref, unlocked.get(chosen));
                 break;
             default:
         }
@@ -211,44 +217,49 @@ public final class AutoCompleting extends DrawState {
                 text.append(Text.literal("\n"));
             text.append(Text.literal(impl.getArgs()));
         }
+        addAliasLines(text, opt);
         return tr.wrapLines(text, 170);
     }
 
     private List<OrderedText> getDescriptionForDescriptiveTooltip(PatternEntries.Entry opt) {
         var tr = MinecraftClient.getInstance().textRenderer;
-        if (chosenDoc >= opt.impls().size()) {
+        if (chosenDoc >= opt.impls().size())
             return List.of();
-        }
         var docN = "[" + (chosenDoc + 1) + "/" + opt.impls().size() + "]";
         var impl = opt.impls().get(chosenDoc);
         var description = Text.literal(docN + " " + impl.getArgs()).formatted(Formatting.GRAY)
-                .append(Text.literal("\n" + impl.getDesc()).formatted(Formatting.DARK_GRAY));
+                .append(Text.literal("\n" + impl.getDesc() + "\n").formatted(Formatting.DARK_GRAY));
+        addAliasLines(description, opt);
         return tr.wrapLines(description, 170);
+    }
+
+    private void addAliasLines(MutableText desc, PatternEntries.Entry opt) {
+        if (opt.isAliased())
+            desc.append(Text.translatable("hexcessible.alias", opt.rawName())
+                    .formatted(Formatting.DARK_GRAY));
+        else
+            desc.append(Text.translatable("hexcessible.alias_none")
+                    .formatted(Formatting.DARK_GRAY));
     }
 
     private List<OrderedText> prepareDescription() {
         var tr = MinecraftClient.getInstance().textRenderer;
         var unlocked = getUnlockedSuggestions();
-        if (unlocked.isEmpty() || chosen >= unlocked.size()) {
+        if (unlocked.isEmpty() || chosen >= unlocked.size())
             return List.of();
-        }
         var opt = unlocked.get(chosen);
 
-        if (opt.sig() == null) {
+        if (opt.sig() == null)
             return tr.wrapLines(Text.translatable("hexcessible.world_specific_autocomplete")
                     .formatted(Formatting.RED), 170);
-        }
 
         var tooltipConfig = Hexcessible.cfg().autoComplete.tooltip;
-        if (!tooltipConfig.visible()) {
+        if (!tooltipConfig.visible())
             return List.of();
-        }
 
-        if (!tooltipConfig.descriptive()) {
-            return getDescriptionForSimpleTooltip(opt);
-        }
-
-        return getDescriptionForDescriptiveTooltip(opt);
+        return !tooltipConfig.descriptive()
+                ? new ArrayList<>(getDescriptionForSimpleTooltip(opt))
+                : new ArrayList<>(getDescriptionForDescriptiveTooltip(opt));
     }
 
     private void drawTooltips(DrawContext ctx, int mx, int my, List<Text> options, List<OrderedText> descLines) {
