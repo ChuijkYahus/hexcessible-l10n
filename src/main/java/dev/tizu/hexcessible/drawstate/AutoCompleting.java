@@ -122,6 +122,11 @@ public final class AutoCompleting extends DrawState {
     }
 
     @Override
+    public void onMouseScroll(int delta) {
+        offsetChosen(-delta);
+    }
+
+    @Override
     public List<String> getDebugInfo() {
         return List.of("Breakout: " + mousePos.distanceSquared(anchor)
                 + " < " + breakoutSize);

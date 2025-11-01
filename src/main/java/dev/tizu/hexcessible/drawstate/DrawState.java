@@ -41,6 +41,10 @@ public sealed class DrawState
         // no-op
     }
 
+    public void onMouseScroll(int delta) {
+        // no-op
+    }
+
     public void requestExit() {
         nextState = getNew(this.castref);
     }

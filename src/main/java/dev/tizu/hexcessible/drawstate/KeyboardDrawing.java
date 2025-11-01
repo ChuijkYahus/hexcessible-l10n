@@ -147,8 +147,7 @@ public final class KeyboardDrawing extends DrawState {
                 moveOrigin(1, 0);
                 break;
             case GLFW.GLFW_KEY_R:
-                originDir = HexDir.values()[(originDir.ordinal() + 1) % HexDir.values().length];
-                recalculateNewAll();
+                rotate(1);
                 break;
             default:
         }
@@ -166,6 +165,17 @@ public final class KeyboardDrawing extends DrawState {
         if (castref.isVisible(next)) // don't allow out of bounds
             origin = next;
         recalculateNewAll();
+    }
+
+    private void rotate(int delta) {
+        var i = Math.floorMod(originDir.ordinal() + delta, HexDir.values().length);
+        originDir = HexDir.values()[i];
+        recalculateNewAll();
+    }
+
+    @Override
+    public void onMouseScroll(int delta) {
+        rotate(-delta);
     }
 
     private void removeCharFromSig() {
