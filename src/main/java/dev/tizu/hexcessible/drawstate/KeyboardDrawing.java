@@ -28,10 +28,16 @@ public final class KeyboardDrawing extends DrawState {
             'q', 'w', 'e', 'a', 'd', 'Q', 'W', 'E', 'A', 'D');
     public static final int COLOR1 = 0xff_64c8ff;
     public static final int COLOR2 = 0xff_fecbe6;
+    public static final int COLOR3 = 0xaa_9eb7c5;
+    public static final int COLOR4 = 0xaa_eadfe5;
 
     private List<HexAngle> sig;
     private HexCoord origin;
-    private HexDir startDir = HexDir.EAST;
+    private HexDir originDir = HexDir.EAST;
+    private @Nullable HexCoord start;
+    private @Nullable HexDir startDir;
+    private @Nullable HexCoord end;
+    private @Nullable HexDir endDir;
     private KeyboardDrawing nextDrawing;
 
     public KeyboardDrawing(CastRef castref, List<HexAngle> sig) {
@@ -42,6 +48,7 @@ public final class KeyboardDrawing extends DrawState {
         super(castref);
         this.sig = new ArrayList<>(sig);
         this.origin = start;
+        recalculateNewAll();
     }
 
     public KeyboardDrawing(CastRef castref, HexCoord start, List<List<HexAngle>> sigs) {
@@ -53,6 +60,7 @@ public final class KeyboardDrawing extends DrawState {
         if (sigs.size() > 1)
             this.nextDrawing = new KeyboardDrawing(castref, start,
                     sigs.subList(1, sigs.size()));
+        recalculateNewAll();
     }
 
     @Override
@@ -69,24 +77,30 @@ public final class KeyboardDrawing extends DrawState {
         return 1 + nextDrawing.queuedCount();
     }
 
-    @Nullable
-    private HexCoord start() {
-        if (sig.isEmpty())
-            return origin;
+    private void recalculateNewAll() {
+        if (sig.isEmpty()) {
+            start = origin;
+            startDir = originDir;
+            end = origin;
+            endDir = originDir;
+            return;
+        }
+
         var mutated = castref.findClosestAvailable(origin,
                 new HexPattern(HexDir.EAST, sig));
-        if (mutated == null)
-            return null;
+        if (mutated == null) {
+            start = null;
+            startDir = null;
+            end = null;
+            endDir = null;
+            return;
+        }
+        start = mutated.coord();
         startDir = mutated.startDir();
-        return mutated.coord();
-    }
 
-    private @Nullable Pair<HexCoord, HexDir> end() {
-        var start = start();
-        if (start == null)
-            return null;
         var pat = new HexPattern(startDir, sig);
-        return new Pair<>(Utils.finalPos(start, pat), pat.finalDir());
+        end = Utils.finalPos(start, pat);
+        endDir = pat.finalDir();
     }
 
     @Override
@@ -96,7 +110,7 @@ public final class KeyboardDrawing extends DrawState {
         renderPattern(ctx);
         if (Hexcessible.cfg().keyboardDraw.keyHint)
             renderNextPointTooltips(ctx);
-        KeyboardDrawing.render(ctx, mx, my, sig, "␣⇥↩", start() == null,
+        KeyboardDrawing.render(ctx, mx, my, sig, "␣⇥↩", start == null,
                 Hexcessible.cfg().keyboardDraw.tooltip, queuedCount());
     }
 
@@ -104,11 +118,15 @@ public final class KeyboardDrawing extends DrawState {
     public void onCharType(char chr) {
         if (!Hexcessible.cfg().keyboardDraw.allow)
             return;
-        if (Character.toLowerCase(chr) == 's') // go back
+        if (Character.toLowerCase(chr) == 's') { // go back
             removeCharFromSig();
-        else if (validSig.contains(chr)
-                && canGo(Utils.angle(chr))) // valid
-            sig.add(Utils.angle(chr));
+        } else if (validSig.contains(chr)) { // valid
+            var angle = Utils.angle(chr);
+            if (canGo(angle)) {
+                sig.add(angle);
+                recalculateNewAll();
+            }
+        }
     }
 
     @Override
@@ -137,7 +155,6 @@ public final class KeyboardDrawing extends DrawState {
     }
 
     private void submit() {
-        var start = start();
         if (start == null)
             return;
         castref.execute(new HexPattern(startDir, sig), start);
@@ -148,6 +165,7 @@ public final class KeyboardDrawing extends DrawState {
         var next = origin.plus(new HexCoord(x, y));
         if (castref.isVisible(next)) // don't allow out of bounds
             origin = next;
+        recalculateNewAll();
     }
 
     private void removeCharFromSig() {
@@ -156,16 +174,30 @@ public final class KeyboardDrawing extends DrawState {
         if (sig.isEmpty())
             return;
         sig.remove(sig.size() - 1);
+        recalculateNewAll();
     }
 
     public void renderPattern(DrawContext ctx) {
+        if (start != null)
+            renderPattern(ctx, start, startDir, sig, COLOR1, COLOR2);
+
+        if (!Hexcessible.cfg().debug)
+            return;
+        if (start != null)
+            drawLine(ctx, origin, start);
+        var mat = ctx.getMatrices().peek().getPositionMatrix();
+        if (start != null)
+            RenderLib.drawSpot(mat, castref.coordToPx(start), 6f, 0f, 0f, 1f, 1f);
+        RenderLib.drawSpot(mat, castref.coordToPx(origin), 6f, 0f, 1f, 0f, 1f);
+    }
+
+    public void renderPattern(DrawContext ctx, HexCoord start, HexDir startDir,
+            List<HexAngle> sig, int color1, int color2) {
+        if (start == null || startDir == null)
+            return;
         var mat = ctx.getMatrices().peek().getPositionMatrix();
         var pat = new HexPattern(startDir, sig);
         var duplicates = RenderLib.findDupIndices(pat.positions());
-
-        var start = start();
-        if (start == null)
-            return;
 
         var points = new ArrayList<Vec2f>();
         for (var c : pat.positions())
@@ -173,27 +205,17 @@ public final class KeyboardDrawing extends DrawState {
                     c.getQ() + start.getQ(),
                     c.getR() + start.getR())));
 
-        RenderLib.drawPatternFromPoints(mat, points, duplicates, false, COLOR1,
-                COLOR2, 0.1f, RenderLib.DEFAULT_READABILITY_OFFSET, 1f, 0);
-
-        if (!Hexcessible.cfg().debug)
-            return;
-        drawLine(ctx, origin, start);
-        RenderLib.drawSpot(mat, castref.coordToPx(start), 6f, 0f, 0f, 1f, 1f);
-        RenderLib.drawSpot(mat, castref.coordToPx(origin), 6f, 0f, 1f, 0f, 1f);
+        RenderLib.drawPatternFromPoints(mat, points, duplicates, false, color1,
+                color2, 0.1f, RenderLib.DEFAULT_READABILITY_OFFSET, 1f, 0);
     }
 
     private void renderNextPointTooltips(DrawContext ctx) {
-        var end = end();
-        if (end == null)
+        if (end == null || endDir == null)
             return;
-        var point = end.getFirst();
-        var dir = end.getSecond();
-
         var tr = MinecraftClient.getInstance().textRenderer;
         for (var angle : HexAngle.values()) {
-            var pos = point.plus(dir.rotatedBy(angle));
-            var charstr = angleAsCharStr(angle);
+            var pos = end.plus(endDir.rotatedBy(angle));
+            var charstr = Utils.angle(angle);
             if (castref.isUsed(pos) || !canGo(angle) || charstr == null)
                 continue;
             var px = castref.coordToPx(pos);
@@ -202,20 +224,11 @@ public final class KeyboardDrawing extends DrawState {
         }
     }
 
-    private boolean canGo(HexAngle angle) {
+    private boolean canGo(@Nullable HexAngle angle) {
+        if (angle == null || startDir == null)
+            return false;
         var pat = new HexPattern(this.startDir, new ArrayList<>(sig));
         return castref.isValidPatternAddition(pat, angle);
-    }
-
-    private static @Nullable String angleAsCharStr(HexAngle angle) {
-        return switch (angle) {
-            case LEFT -> "Q";
-            case FORWARD -> "W";
-            case RIGHT -> "E";
-            case LEFT_BACK -> "A";
-            case RIGHT_BACK -> "D";
-            default -> null;
-        };
     }
 
     private void drawLine(DrawContext ctx, HexCoord start, HexCoord end) {
@@ -271,6 +284,7 @@ public final class KeyboardDrawing extends DrawState {
     @Override
     public void onMouseMove(double mx, double my) {
         origin = castref.pxToCoord(new Vec2f((int) mx, (int) my));
+        recalculateNewAll();
     }
 
     @Override

@@ -64,15 +64,19 @@ public class Utils {
         return angles.chars().mapToObj(c -> angle((char) c)).toList();
     }
 
-    public static String angle(List<HexAngle> angles) {
-        return angles.stream().map(s -> switch (s) {
+    public static String angle(HexAngle angle) {
+        return switch (angle) {
             case LEFT -> "q";
             case FORWARD -> "w";
             case RIGHT -> "e";
             case LEFT_BACK -> "a";
             case BACK -> "s";
             case RIGHT_BACK -> "d";
-        }).reduce("", String::concat);
+        };
+    }
+
+    public static String angle(List<HexAngle> angles) {
+        return angles.stream().map(Utils::angle).reduce("", String::concat);
     }
 
     public static String angle(List<HexAngle> angles, boolean uppercase) {
