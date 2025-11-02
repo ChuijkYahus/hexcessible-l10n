@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import dev.tizu.hexcessible.Hexcessible;
 import dev.tizu.hexcessible.Utils;
 import dev.tizu.hexcessible.accessor.CastRef;
+import dev.tizu.hexcessible.entries.PatternEntries;
 import net.minecraft.client.gui.DrawContext;
 
 public final class Idling extends DrawState {
@@ -38,6 +39,9 @@ public final class Idling extends DrawState {
         if (keyCode == GLFW.GLFW_KEY_SPACE && ctrl
                 && Hexcessible.cfg().autoComplete.allow)
             nextState = new AutoCompleting(castref);
+        if (keyCode == GLFW.GLFW_KEY_E && ctrl && hoveredOver != null)
+            nextState = new AliasChanging(castref, PatternEntries.INSTANCE
+                    .getFromSig(hoveredOver.getAngles()));
     }
 
     @Override
