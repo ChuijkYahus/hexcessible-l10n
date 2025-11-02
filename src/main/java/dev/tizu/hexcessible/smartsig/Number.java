@@ -1,5 +1,6 @@
 package dev.tizu.hexcessible.smartsig;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class Number implements SmartSig {
-
+    private static final DecimalFormat DF = new DecimalFormat("#.##");
     private static final List<String> NUMBERS = new ArrayList<>();
     static {
         Collections.addAll(NUMBERS, Hexcessible.getAsset("/numbers.txt")
@@ -57,7 +58,8 @@ public class Number implements SmartSig {
         var doc = new BookEntries.Entry("hexcessible:number", null,
                 "(experimental)", "", String.valueOf(target), 0);
         return new PatternEntries.Entry(Identifier.of("hexcessible", "number/"
-                + target), i18nkey, () -> false, HexDir.EAST, sig, List.of(doc), 1);
+                + DF.format(target)), i18nkey, () -> false, HexDir.EAST, sig,
+                List.of(doc), 1);
     }
 
     private float getFor(List<HexAngle> sig) {
