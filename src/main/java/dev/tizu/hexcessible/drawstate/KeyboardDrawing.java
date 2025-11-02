@@ -27,8 +27,8 @@ public final class KeyboardDrawing extends DrawState {
             'q', 'w', 'e', 'a', 'd', 'Q', 'W', 'E', 'A', 'D');
     public static final int COLOR1 = 0xff_64c8ff;
     public static final int COLOR2 = 0xff_fecbe6;
-    public static final int COLOR3 = 0xaa_9eb7c5;
-    public static final int COLOR4 = 0xaa_eadfe5;
+    public static final int COLOR3 = 0xaa_363a4f;
+    public static final int COLOR4 = 0xaa_6e738d;
 
     private List<HexAngle> sig;
     private HexCoord origin;
