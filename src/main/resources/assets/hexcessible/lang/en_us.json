@@ -16,6 +16,7 @@
     "hexcessible.smartsig.bookkeeper.keep1": "keep one iota",
     "hexcessible.smartsig.bookkeeper.join": ", then ",
     "hexcessible.smartsig.bookkeeper.suffix": ".",
+    "hexcessible.smartsig.grimoire": "Grimoire Macro",
 
     "text.autoconfig.hexcessible.title": "Hexcessible Config",
     "text.autoconfig.hexcessible.option.debug": "Debug Mode",
