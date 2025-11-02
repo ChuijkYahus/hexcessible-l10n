@@ -165,13 +165,13 @@ public final class AutoCompleting extends DrawState {
             return;
         var x = (int) anchor.x;
         var y = (int) anchor.y;
-        renderQueryTooltip(ctx, x, y, mx, my);
+        renderQueryTooltip(ctx, x, y);
         if (getUnlockedSuggestions().isEmpty() || noDistract())
             return;
         renderAutocompleteTooltips(ctx, x, y);
     }
 
-    private void renderQueryTooltip(DrawContext ctx, int x, int y, int mx, int my) {
+    private void renderQueryTooltip(DrawContext ctx, int x, int y) {
         var tr = MinecraftClient.getInstance().textRenderer;
         var unlockedCount = getUnlockedSuggestions().size();
         var tInput = !query.equals("")
@@ -179,7 +179,10 @@ public final class AutoCompleting extends DrawState {
                         .formatted(Formatting.DARK_GRAY))
                 : Text.translatable("hexcessible.start_typing")
                         .formatted(Formatting.DARK_GRAY, Formatting.ITALIC);
-        ctx.drawTooltip(tr, tInput, noDistract() ? mx : x, noDistract() ? my : y);
+        if (!noDistract())
+            ctx.drawTooltip(tr, tInput, x, y);
+        else
+            ctx.drawTextWithShadow(tr, tInput, x + 12, y - 12, 15728880);
     }
 
     private boolean noDistract() {
