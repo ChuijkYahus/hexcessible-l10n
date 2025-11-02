@@ -245,7 +245,7 @@ public final class KeyboardDrawing extends DrawState {
             var targetX = endpx.x + (dx / distance) * 20;
             var targetY = endpx.y + (dy / distance) * 20;
             ctx.drawCenteredTextWithShadow(tr, Text.literal(charstr),
-                    (int) targetX - 1, (int) targetY - 10, 0xff_A8A8A8);
+                    (int) targetX - 1, (int) targetY - 5, 0xff_A8A8A8);
         }
     }
 
