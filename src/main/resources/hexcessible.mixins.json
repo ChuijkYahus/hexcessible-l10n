@@ -10,7 +10,8 @@
         "DimmedMixin",
         "ShowAllDotsMixin",
         "KeyDocsScreenMixin",
-        "PerWorldLearnMixin"
+        "PerWorldLearnMixin",
+        "DrawStateHexdbgInteropMixin"
     ],
     "injectors": {
         "defaultRequire": 1

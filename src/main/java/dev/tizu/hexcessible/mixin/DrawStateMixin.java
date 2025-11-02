@@ -35,6 +35,8 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
     private CastingInterfaceAccessor accessor;
     @Unique
     private DrawState state;
+    @Unique
+    private boolean noActing;
 
     @Shadow(remap = false)
     private Hand handOpenedWith;
@@ -49,6 +51,7 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
         accessor = new CastingInterfaceAccessor(castui);
         var castref = new CastRef(castui, handOpenedWith, patterns, usedSpots);
         state = DrawState.getNew(castref);
+        noActing = !(MinecraftClient.getInstance().currentScreen instanceof GuiSpellcasting);
     }
 
     @Inject(at = @At("HEAD"), method = "mouseMoved")
@@ -69,6 +72,8 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
     @Inject(at = @At("RETURN"), method = "render")
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta,
             CallbackInfo info) {
+        if (noActing)
+            return;
         if (DrawState.shouldClose(state)) {
             ((GuiSpellcasting) (Object) this).close();
             return;
