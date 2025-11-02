@@ -33,18 +33,21 @@ public final class AliasChanging extends DrawState {
     public void onRender(DrawContext ctx, int mx, int my) {
         var tr = MinecraftClient.getInstance().textRenderer;
 
+        var x = ctx.getScaledWindowWidth() / 3;
+        var y = ctx.getScaledWindowHeight() / 2;
+
         var originalStr = sig + " " + original;
         var originalT = alias.isBlank()
                 ? Text.literal(originalStr + " ⇥↩").formatted(Formatting.BLUE)
                 : Text.literal(originalStr).formatted(Formatting.GRAY);
-        ctx.drawTooltip(tr, originalT, mx, my);
+        ctx.drawTooltip(tr, originalT, x, y - 1);
 
         var aliasT = alias.isBlank()
                 ? Text.translatable("hexcessible.start_typing.alias")
                         .formatted(Formatting.DARK_GRAY)
                 : Text.literal(alias + " ⇥↩")
                         .formatted(Formatting.BLUE);
-        ctx.drawTooltip(tr, aliasT, mx, my + 17);
+        ctx.drawTooltip(tr, aliasT, x, y + 16);
     }
 
     @Override
