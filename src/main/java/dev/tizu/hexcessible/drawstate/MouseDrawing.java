@@ -22,4 +22,10 @@ public final class MouseDrawing extends DrawState {
         KeyboardDrawing.render(ctx, mx, my, sig, "", false,
                 Hexcessible.cfg().mouseDraw.tooltip, 0);
     }
+
+    @Override
+    public void requestExit() {
+        super.requestExit();
+        castref.closeUI();
+    }
 }

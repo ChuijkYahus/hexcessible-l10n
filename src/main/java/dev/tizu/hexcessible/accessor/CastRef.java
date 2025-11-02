@@ -47,6 +47,10 @@ public class CastRef {
         return castui.hexSize();
     }
 
+    public void closeUI() {
+        castui.close();
+    }
+
     public boolean isUsed(HexCoord coord) {
         return usedSpots.contains(coord) || !isVisible(coord);
     }
