@@ -19,7 +19,8 @@ public final class MouseDrawing extends DrawState {
         if (accessor.getState() != State.DRAWING)
             return;
         var sig = accessor.getPattern().getAngles();
-        KeyboardDrawing.render(ctx, mx, my, sig, "", false,
+        var size = (int) castref.hexSize() * 2;
+        KeyboardDrawing.render(ctx, mx + size, my, sig, "", false,
                 Hexcessible.cfg().mouseDraw.tooltip, 0);
     }
 
