@@ -249,9 +249,6 @@ public final class AutoCompleting extends DrawState {
         if (opt.isAliased())
             desc.append(Text.translatable("hexcessible.alias", opt.rawName())
                     .formatted(Formatting.DARK_GRAY));
-        else
-            desc.append(Text.translatable("hexcessible.alias_none")
-                    .formatted(Formatting.DARK_GRAY));
     }
 
     private List<OrderedText> prepareDescription() {

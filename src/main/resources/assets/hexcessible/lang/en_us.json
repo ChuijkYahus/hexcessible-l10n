@@ -6,7 +6,6 @@
     "hexcessible.no_draw_methods": "All methods of drawing are disabled. Please enable at least one to cast spells.",
     "hexcessible.world_specific_autocomplete": "This pattern is world-specific. Start casting with an Ancient Scroll in your offhand to learn it.",
     "hexcessible.start_typing.alias": "Name this pattern...",
-    "hexcessible.alias_none": "No alias given (ctrl-e)",
     "hexcessible.alias": "Aliased: %s",
 
     "hexcessible.smartsig.bookkeeper.prefix": "Based on your current stack, this will ",
