@@ -124,8 +124,9 @@ public final class AutoCompleting extends DrawState {
     }
 
     @Override
-    public void onMouseScroll(int delta) {
+    public boolean onMouseScroll(int delta) {
         offsetChosen(-delta);
+        return true;
     }
 
     @Override

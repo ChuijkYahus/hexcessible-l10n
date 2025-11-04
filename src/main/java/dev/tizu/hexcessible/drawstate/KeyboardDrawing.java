@@ -183,8 +183,9 @@ public final class KeyboardDrawing extends DrawState {
     }
 
     @Override
-    public void onMouseScroll(int delta) {
+    public boolean onMouseScroll(int delta) {
         rotate(-delta);
+        return true;
     }
 
     private void removeCharFromSig() {

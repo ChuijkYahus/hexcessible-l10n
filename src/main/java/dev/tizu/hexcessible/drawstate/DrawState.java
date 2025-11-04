@@ -42,8 +42,9 @@ public sealed class DrawState
         // no-op
     }
 
-    public void onMouseScroll(int delta) {
+    public boolean onMouseScroll(int delta) {
         // no-op
+        return false;
     }
 
     public void requestExit() {
