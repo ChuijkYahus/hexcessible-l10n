@@ -341,6 +341,7 @@ public final class KeyboardDrawing extends DrawState {
                     .subList(0, KeyboardDrawing.validSig.size() / 2).stream()
                     .map(Object::toString).toList());
             keys.put(kbdChars, "draw_start");
+            keys.put("bksp/s", "undo");
         }
 
         keys.put("LMB/tab/enter/space", "cast");

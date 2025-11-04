@@ -27,6 +27,7 @@
     "hexcessible.hint.search": "Search",
     "hexcessible.hint.alias": "Alias this",
     "hexcessible.hint.alias_off": "Remove alias",
+    "hexcessible.hint.undo": "Undo",
 
     "text.autoconfig.hexcessible.title": "Hexcessible Config",
     "text.autoconfig.hexcessible.option.debug": "Debug Mode",
