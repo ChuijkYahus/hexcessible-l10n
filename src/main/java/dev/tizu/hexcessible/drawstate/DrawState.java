@@ -1,6 +1,7 @@
 package dev.tizu.hexcessible.drawstate;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +56,16 @@ public sealed class DrawState
 
     public boolean allowStartDrawing() {
         return true;
+    }
+
+    /**
+     * Modifiers: ctrl, shift
+     * Combined press: ctrl-a
+     * Alternatives: q/w/e/a/d
+     * Mouse: LMB, RMB, DRAG, SCROLL
+     */
+    public Map<String, String> getHints() {
+        return Map.of();
     }
 
     public static DrawState getNew(CastRef castref) {

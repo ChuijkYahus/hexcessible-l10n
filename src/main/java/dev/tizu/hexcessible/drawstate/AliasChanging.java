@@ -2,6 +2,7 @@ package dev.tizu.hexcessible.drawstate;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
@@ -79,5 +80,14 @@ public final class AliasChanging extends DrawState {
                 break;
             default:
         }
+    }
+
+    @Override
+    public Map<String, String> getHints() {
+        var keys = new HashMap<String, String>();
+
+        keys.put("tab/enter", alias.isBlank() ? "alias_off" : "alias");
+
+        return keys;
     }
 }

@@ -1,5 +1,8 @@
 package dev.tizu.hexcessible.drawstate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import dev.tizu.hexcessible.Hexcessible;
 import dev.tizu.hexcessible.accessor.CastRef;
 import dev.tizu.hexcessible.accessor.CastingInterfaceAccessor;
@@ -28,5 +31,14 @@ public final class MouseDrawing extends DrawState {
     public void requestExit() {
         super.requestExit();
         castref.closeUI();
+    }
+
+    @Override
+    public Map<String, String> getHints() {
+        var keys = new HashMap<String, String>();
+
+        keys.put("LMB", "cast");
+
+        return keys;
     }
 }

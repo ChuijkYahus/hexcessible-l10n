@@ -26,6 +26,8 @@ import dev.tizu.hexcessible.accessor.DrawStateMixinAccessor;
 import dev.tizu.hexcessible.drawstate.DrawState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec2f;
 
@@ -39,6 +41,8 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
     private DrawState state;
     @Unique
     private boolean noActing;
+    @Unique
+    private double time = 0;
 
     @Shadow(remap = false)
     private Hand handOpenedWith;
@@ -74,6 +78,7 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
     @Inject(at = @At("RETURN"), method = "render")
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta,
             CallbackInfo info) {
+        time += delta;
         if (!noActing && DrawState.shouldClose(state)) {
             ((GuiSpellcasting) (Object) this).close();
             return;
@@ -90,14 +95,40 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
                 renderDebug(ctx, debug.get(i), i + 1);
         }
 
-        if (!noActing)
+        if (!noActing) {
             state.onRender(ctx, mouseX, mouseY);
+            renderHints(ctx);
+        }
     }
 
     @Unique
     private void renderDebug(DrawContext ctx, String text, int i) {
         ctx.drawTextWithShadow(MinecraftClient.getInstance().textRenderer,
                 text, 5, 5 + (i * 10), 0xFFFFFF);
+    }
+
+    @Unique
+    private void renderHints(DrawContext ctx) {
+        if (!Hexcessible.cfg().shortcutHints)
+            return;
+        var hints = state.getHints();
+        if (hints.isEmpty())
+            return;
+
+        var x = 6;
+        var y = ctx.getScaledWindowHeight() - 16;
+        for (var hint : hints.entrySet()) {
+            var keys = hint.getKey().split("/");
+            var keyI = (int) (time * 0.05) % keys.length;
+            var text = Text.empty()
+                    .append(Text.translatable("hexcessible.hint." + hint.getValue())
+                            .formatted(Formatting.DARK_GRAY))
+                    .append(Text.literal(" [" + keys[keyI] + "]")
+                            .formatted(Formatting.GRAY));
+            ctx.drawTextWithShadow(MinecraftClient.getInstance().textRenderer,
+                    text, x, y, 0xFFFFFF);
+            y -= 10;
+        }
     }
 
     @WrapMethod(method = "drawStart", remap = false)

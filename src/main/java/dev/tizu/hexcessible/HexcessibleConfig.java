@@ -35,6 +35,8 @@ public class HexcessibleConfig implements ConfigData {
     public boolean noHexicalWalk = true;
     @ConfigEntry.Gui.Tooltip
     public boolean tooltipRenderSigs = true;
+    @ConfigEntry.Gui.Tooltip
+    public boolean shortcutHints = true;
     /*
      * TODO: @ConfigEntry.Gui.Tooltip
      * public boolean tooltipFixed = false;

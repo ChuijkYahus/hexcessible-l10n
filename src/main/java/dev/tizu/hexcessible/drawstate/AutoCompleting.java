@@ -2,7 +2,9 @@ package dev.tizu.hexcessible.drawstate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -305,5 +307,20 @@ public final class AutoCompleting extends DrawState {
         // TODO: mouse-based interaction
         if (button == 0)
             requestExit();
+    }
+
+    @Override
+    public Map<String, String> getHints() {
+        var keys = new HashMap<String, String>();
+
+        keys.put("type", "search");
+        if (!noDistract()) {
+            keys.put("tab/enter", "cast");
+            keys.put("SCROLL/up/down", "scroll");
+            keys.put("left/right", "scroll_definitions");
+            keys.put("ctrl-e", "alias");
+        }
+
+        return keys;
     }
 }

@@ -1,7 +1,9 @@
 package dev.tizu.hexcessible.drawstate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -327,5 +329,23 @@ public final class KeyboardDrawing extends DrawState {
             requestExit();
         if (button == 0)
             submit();
+    }
+
+    @Override
+    public Map<String, String> getHints() {
+        var keys = new HashMap<String, String>();
+
+        if (Hexcessible.cfg().keyboardDraw.allow) {
+            var kbdChars = String.join("/", KeyboardDrawing.validSig
+                    .subList(0, KeyboardDrawing.validSig.size() / 2).stream()
+                    .map(Object::toString).toList());
+            keys.put(kbdChars, "draw_start");
+        }
+
+        keys.put("LMB/tab/enter/space", "cast");
+        keys.put("DRAG/h/j/k/l/up/down/left/right", "move");
+        keys.put("SCROLL/r/shift-r", "rotate");
+
+        return keys;
     }
 }

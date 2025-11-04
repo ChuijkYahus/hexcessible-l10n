@@ -1,6 +1,8 @@
 package dev.tizu.hexcessible.drawstate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -71,4 +73,25 @@ public final class Idling extends DrawState {
      * ctx.getScaledWindowWidth() / 2, ctx.getScaledWindowHeight() / 2, 16733525);
      * }
      */
+
+    @Override
+    public Map<String, String> getHints() {
+        var keys = new HashMap<String, String>();
+
+        if (Hexcessible.cfg().keyboardDraw.allow) {
+            var kbdChars = String.join("/", KeyboardDrawing.validSig
+                    .subList(0, KeyboardDrawing.validSig.size() / 2).stream()
+                    .map(Object::toString).toList());
+            keys.put("LMB/" + kbdChars, "draw_start");
+        } else {
+            keys.put("LMB", "draw_start");
+        }
+
+        if (Hexcessible.cfg().autoComplete.allow)
+            keys.put("ctrl-space", "auto_complete");
+        if (hoveredOver != null)
+            keys.put("ctrl-e", "alias");
+
+        return keys;
+    }
 }
