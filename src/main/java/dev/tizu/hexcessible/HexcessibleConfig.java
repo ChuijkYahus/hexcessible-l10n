@@ -77,7 +77,7 @@ public class HexcessibleConfig implements ConfigData {
         @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
         public OptionalTooltip tooltip = OptionalTooltip.DESCRIPTIVE;
         @ConfigEntry.Gui.Tooltip
-        public boolean keyHint = false;
+        public boolean keyHint = true;
         @ConfigEntry.Gui.Tooltip
         public boolean ghost = true;
     }
