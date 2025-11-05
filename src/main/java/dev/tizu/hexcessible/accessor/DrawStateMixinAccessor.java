@@ -12,4 +12,6 @@ public interface DrawStateMixinAccessor {
     HexPattern getPatternAt(int x, int y);
 
     void disallowTyping();
+
+    boolean hexcessible$drawEnd();
 }

@@ -60,6 +60,7 @@ public final class AutoCompleting extends DrawState {
 
     @Override
     public void onCharType(char chr) {
+        castref.stopDrawing();
         setQuery(query + chr);
     }
 
@@ -298,6 +299,12 @@ public final class AutoCompleting extends DrawState {
     @Override
     public boolean allowStartDrawing() {
         return noDistract();
+    }
+
+    @Override
+    public void requestExit() {
+        castref.stopDrawing();
+        super.requestExit();
     }
 
     @Override

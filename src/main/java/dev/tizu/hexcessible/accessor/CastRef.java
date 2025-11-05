@@ -26,14 +26,17 @@ public class CastRef {
     private final Hand handOpenedWith;
     private final List<ResolvedPattern> patterns;
     private final Set<HexCoord> usedSpots;
+    private final Runnable stopDrawing;
     private boolean canTypeHere = true;
 
     public CastRef(GuiSpellcasting castui, Hand handOpenedWith,
-            List<ResolvedPattern> patterns, Set<HexCoord> usedSpots) {
+            List<ResolvedPattern> patterns, Set<HexCoord> usedSpots,
+            Runnable stopDrawing) {
         this.castui = castui;
         this.handOpenedWith = handOpenedWith;
         this.patterns = patterns;
         this.usedSpots = usedSpots;
+        this.stopDrawing = stopDrawing;
     }
 
     public HexCoord pxToCoord(Vec2f px) {
@@ -85,6 +88,10 @@ public class CastRef {
         this.usedSpots.addAll(pat.positions(start));
         IClientXplatAbstractions.INSTANCE.sendPacketToServer(
                 new MsgNewSpellPatternC2S(handOpenedWith, pat, patterns));
+    }
+
+    public void stopDrawing() {
+        stopDrawing.run();
     }
 
     public static record PatternPlacement(HexCoord coord, HexDir startDir) {

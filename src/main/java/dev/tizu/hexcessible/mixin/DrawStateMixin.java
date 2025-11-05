@@ -50,12 +50,18 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
     @Shadow(remap = false)
     private Set<HexCoord> usedSpots;
 
+    @Shadow(remap = false, prefix = "hexcessible$")
+    public boolean hexcessible$drawEnd() {
+        return false;
+    }
+
     @Inject(at = @At("HEAD"), method = "init")
     private void init(CallbackInfo info) {
         PatternEntries.INSTANCE.invalidateCaches();
         var castui = (GuiSpellcasting) (Object) this;
         accessor = new CastingInterfaceAccessor(castui);
-        castref = new CastRef(castui, handOpenedWith, patterns, usedSpots);
+        castref = new CastRef(castui, handOpenedWith, patterns, usedSpots,
+                this::hexcessible$drawEnd);
         state = DrawState.getNew(castref);
         noActing = !(MinecraftClient.getInstance().currentScreen instanceof GuiSpellcasting);
     }
