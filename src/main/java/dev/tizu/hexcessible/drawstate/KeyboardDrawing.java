@@ -342,7 +342,7 @@ public final class KeyboardDrawing extends DrawState {
 
         keys.put("lmb/tab/enter/space", "cast");
         keys.put("drag/h/j/k/l/←/↓/↑/→", "move");
-        keys.put("scroll/r/shift-r", "rotate");
+        keys.put("wheel/r/shift-r", "rotate");
 
         return keys;
     }

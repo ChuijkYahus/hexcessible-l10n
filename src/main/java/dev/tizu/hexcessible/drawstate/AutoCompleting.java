@@ -321,7 +321,7 @@ public final class AutoCompleting extends DrawState {
         keys.put("type", "search");
         if (!noDistract()) {
             keys.put("tab/enter", "cast");
-            keys.put("SCROLL/up/down", "scroll");
+            keys.put("wheel/up/down", "scroll");
             keys.put("left/right", "scroll_definitions");
             keys.put("ctrl-e", "alias");
         }
