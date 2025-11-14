@@ -12,7 +12,8 @@
         "PerWorldLearnMixin",
         "DrawStateHexdbgInteropMixin",
         "NoHexicalWalkMixin",
-        "NoHexicalEvokeMixin"
+        "NoHexicalEvokeMixin",
+        "RenderLibMixin"
     ],
     "injectors": {
         "defaultRequire": 1

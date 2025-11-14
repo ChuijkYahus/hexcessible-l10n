@@ -33,6 +33,8 @@
     "text.autoconfig.hexcessible.option.debug": "Debug Mode",
     "text.autoconfig.hexcessible.option.dimmed": "Dim UI",
     "text.autoconfig.hexcessible.option.dimmed.@Tooltip": "Dim the background of the spellcasting interface",
+    "text.autoconfig.hexcessible.option.prefersReducedMotion": "Prefers Reduced Motion",
+    "text.autoconfig.hexcessible.option.prefersReducedMotion.@Tooltip": "Disable some moving animations in the spellcasting interface",
     "text.autoconfig.hexcessible.option.hideFloaties": "Hide floaties",
     "text.autoconfig.hexcessible.option.hideFloaties.@Tooltip": "Hide the patterns shown around the player when casting spells",
     "text.autoconfig.hexcessible.option.showAllDots": "Show all dots",

@@ -23,6 +23,8 @@ public class HexcessibleConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     public boolean dimmed = false;
     @ConfigEntry.Gui.Tooltip
+    public boolean prefersReducedMotion = false;
+    @ConfigEntry.Gui.Tooltip
     public boolean hideFloaties = false;
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.Excluded
