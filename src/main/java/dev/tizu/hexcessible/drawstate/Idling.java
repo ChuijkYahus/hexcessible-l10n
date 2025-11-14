@@ -18,6 +18,7 @@ import net.minecraft.util.math.Vec2f;
 public final class Idling extends DrawState {
 
     private @Nullable HexPattern hoveredOver;
+    private @Nullable PatternEntries.Entry hoveredOverEntry;
     private long hoveredOverStart = 0;
     private Vec2f mousePos = new Vec2f(0, 0);
 
@@ -45,9 +46,8 @@ public final class Idling extends DrawState {
             var pos = castref.pxToCoord(mousePos);
             nextState = new AutoCompleting(castref, pos);
         }
-        if (keyCode == GLFW.GLFW_KEY_E && ctrl && hoveredOver != null)
-            nextState = new AliasChanging(castref, PatternEntries.INSTANCE
-                    .getFromSig(hoveredOver.getAngles()));
+        if (keyCode == GLFW.GLFW_KEY_E && ctrl && hoveredOverEntry != null)
+            nextState = new AliasChanging(castref, hoveredOverEntry);
     }
 
     @Override
@@ -59,6 +59,7 @@ public final class Idling extends DrawState {
         } else if (hovered != hoveredOver) {
             hoveredOverStart = System.currentTimeMillis();
             hoveredOver = hovered;
+            hoveredOverEntry = PatternEntries.INSTANCE.getFromSig(hovered.getAngles());
         } else if (hoveredOverStart + 500 < System.currentTimeMillis()) {
             KeyboardDrawing.render(ctx, mx, my, hovered.getAngles(), false,
                     Hexcessible.cfg().idle.tooltip, 0);
@@ -94,7 +95,7 @@ public final class Idling extends DrawState {
 
         if (Hexcessible.cfg().autoComplete.allow)
             keys.put("ctrl-space", "auto_complete");
-        if (hoveredOver != null)
+        if (hoveredOverEntry != null)
             keys.put("ctrl-e", "alias");
 
         return keys;
