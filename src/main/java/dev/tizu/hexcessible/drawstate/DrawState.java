@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import dev.tizu.hexcessible.accessor.CastRef;
-import dev.tizu.hexcessible.accessor.CastingInterfaceAccessor;
 import kotlin.Pair;
 import net.minecraft.client.gui.DrawContext;
 
@@ -77,8 +76,7 @@ public sealed class DrawState
     public static DrawState updateRequired(GuiSpellcasting castui, DrawState current) {
         if (current.nextState != null)
             return current.nextState;
-        var accessor = new CastingInterfaceAccessor(castui);
-        var hexState = accessor.getState();
+        var hexState = current.castref.internals().getState();
         var allowed = switch (hexState) {
             case BETWEENPATTERNS ->
                 List.of(Idling.class,
@@ -96,8 +94,9 @@ public sealed class DrawState
             return null;
         return switch (hexState) {
             case BETWEENPATTERNS -> new Idling(current.castref);
-            case JUSTSTARTED -> new AutoCompleting(current.castref, accessor.getStart());
-            case DRAWING -> new MouseDrawing(current.castref, accessor);
+            case JUSTSTARTED -> new AutoCompleting(current.castref,
+                    current.castref.internals().getStart());
+            case DRAWING -> new MouseDrawing(current.castref);
         };
     }
 

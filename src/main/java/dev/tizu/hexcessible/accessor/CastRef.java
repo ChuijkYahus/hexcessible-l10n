@@ -23,16 +23,18 @@ import net.minecraft.util.math.Vec2f;
 
 public class CastRef {
     private final GuiSpellcasting castui;
+    private final CastingInterfaceAccessor accessor;
     private final Hand handOpenedWith;
     private final List<ResolvedPattern> patterns;
     private final Set<HexCoord> usedSpots;
     private final Runnable stopDrawing;
     private boolean canTypeHere = true;
 
-    public CastRef(GuiSpellcasting castui, Hand handOpenedWith,
-            List<ResolvedPattern> patterns, Set<HexCoord> usedSpots,
-            Runnable stopDrawing) {
+    public CastRef(GuiSpellcasting castui, CastingInterfaceAccessor accessor,
+            Hand handOpenedWith, List<ResolvedPattern> patterns,
+            Set<HexCoord> usedSpots, Runnable stopDrawing) {
         this.castui = castui;
+        this.accessor = accessor;
         this.handOpenedWith = handOpenedWith;
         this.patterns = patterns;
         this.usedSpots = usedSpots;
@@ -161,5 +163,9 @@ public class CastRef {
                 .findFirst()
                 .map(ResolvedPattern::getPattern)
                 .orElse(null);
+    }
+
+    public CastingInterfaceAccessor internals() {
+        return accessor;
     }
 }

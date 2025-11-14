@@ -35,8 +35,6 @@ import net.minecraft.util.math.Vec2f;
 @Mixin(GuiSpellcasting.class)
 public class DrawStateMixin implements DrawStateMixinAccessor {
     @Unique
-    private CastingInterfaceAccessor accessor;
-    @Unique
     private CastRef castref;
     @Unique
     private DrawState state;
@@ -59,9 +57,9 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
     private void init(CallbackInfo info) {
         PatternEntries.INSTANCE.invalidateCaches();
         var castui = (GuiSpellcasting) (Object) this;
-        accessor = new CastingInterfaceAccessor(castui);
-        castref = new CastRef(castui, handOpenedWith, patterns, usedSpots,
-                this::hexcessible$drawEnd);
+        var accessor = new CastingInterfaceAccessor(castui);
+        castref = new CastRef(castui, accessor, handOpenedWith, patterns,
+                usedSpots, this::hexcessible$drawEnd);
         state = DrawState.getNew(castref);
         noActing = !(MinecraftClient.getInstance().currentScreen instanceof GuiSpellcasting);
     }

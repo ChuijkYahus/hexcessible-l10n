@@ -13,6 +13,7 @@ import org.lwjgl.glfw.GLFW;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import dev.tizu.hexcessible.Hexcessible;
 import dev.tizu.hexcessible.accessor.CastRef;
+import dev.tizu.hexcessible.accessor.CastingInterfaceAccessor.State;
 import dev.tizu.hexcessible.entries.PatternEntries;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -117,6 +118,10 @@ public final class AutoCompleting extends DrawState {
     public void onMouseMove(double mx, double my) {
         mousePos = new Vec2f((float) mx, (float) my);
         lastInteractWasMouse = true;
+
+        if (noDistract() && castref.internals().getState() == State.BETWEENPATTERNS
+                && mousePos.distanceSquared(anchor) > breakoutSize)
+            requestExit();
     }
 
     @Override
