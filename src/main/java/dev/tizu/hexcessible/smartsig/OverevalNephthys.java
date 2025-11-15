@@ -11,7 +11,6 @@ import dev.tizu.hexcessible.entries.BookEntries;
 import dev.tizu.hexcessible.entries.PatternEntries;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class OverevalNephthys implements SmartSig.Conditional {
 
@@ -73,7 +72,7 @@ public class OverevalNephthys implements SmartSig.Conditional {
         BookEntries.Entry doc = new BookEntries.Entry("hexcessible:nephthys/" + depth,
                 null, desc, in.toString(), out.toString(), 0);
 
-        return new PatternEntries.Entry(Identifier.of("hexcessible", "nephthys/" + depth),
-                i18nkey, () -> false, HexDir.SOUTH_EAST, List.of(angles), List.of(doc), 0);
+        return new PatternEntries.Entry("hexcessible:nephthys/" + depth, i18nkey,
+                () -> false, HexDir.SOUTH_EAST, List.of(angles), List.of(doc), 0);
     }
 }

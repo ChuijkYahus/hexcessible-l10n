@@ -10,7 +10,6 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import dev.tizu.hexcessible.entries.BookEntries;
 import dev.tizu.hexcessible.entries.PatternEntries;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class Bookkeeper implements SmartSig {
     // For refernece: In this class, true = drop, false = keep
@@ -107,9 +106,8 @@ public class Bookkeeper implements SmartSig {
                 representation).getString();
         var doc = new BookEntries.Entry("hexcessible:bookkeeper", null,
                 getDesc(target), in.toString(), out.toString(), 0);
-        return new PatternEntries.Entry(Identifier.of("hexcessible",
-                "bookkeeper/" + representation), i18nkey, () -> false,
-                HexDir.EAST, List.of(angles), List.of(doc), 0);
+        return new PatternEntries.Entry("hexcessible:bookkeeper/" + representation,
+                i18nkey, () -> false, HexDir.EAST, List.of(angles), List.of(doc), 0);
     }
 
     private static String getDesc(List<Boolean> target) {

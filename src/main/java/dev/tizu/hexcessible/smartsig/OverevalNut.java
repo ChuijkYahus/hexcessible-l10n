@@ -11,7 +11,6 @@ import dev.tizu.hexcessible.entries.BookEntries;
 import dev.tizu.hexcessible.entries.PatternEntries;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class OverevalNut implements SmartSig.Conditional {
 
@@ -76,7 +75,7 @@ public class OverevalNut implements SmartSig.Conditional {
         BookEntries.Entry doc = new BookEntries.Entry("hexcessible:nut/" + amount,
                 null, desc, in.toString(), out.toString(), 0);
 
-        return new PatternEntries.Entry(Identifier.of("hexcessible", "nut/" + amount),
-                i18nkey, () -> false, HexDir.NORTH_EAST, List.of(angles), List.of(doc), 0);
+        return new PatternEntries.Entry("hexcessible:nut/" + amount, i18nkey,
+                () -> false, HexDir.NORTH_EAST, List.of(angles), List.of(doc), 0);
     }
 }

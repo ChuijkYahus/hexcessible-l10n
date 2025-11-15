@@ -11,7 +11,6 @@ import dev.tizu.hexcessible.entries.BookEntries;
 import dev.tizu.hexcessible.entries.PatternEntries;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class OverevalSekhmet implements SmartSig.Conditional {
 
@@ -73,7 +72,7 @@ public class OverevalSekhmet implements SmartSig.Conditional {
         BookEntries.Entry doc = new BookEntries.Entry("hexcessible:sekhmet/" + preserve,
                 null, desc, in.toString(), out.toString(), 0);
 
-        return new PatternEntries.Entry(Identifier.of("hexcessible", "sekhmet/" + preserve),
-                i18nkey, () -> false, HexDir.WEST, List.of(angles), List.of(doc), 0);
+        return new PatternEntries.Entry("hexcessible:sekhmet/" + preserve, i18nkey,
+                () -> false, HexDir.WEST, List.of(angles), List.of(doc), 0);
     }
 }

@@ -10,7 +10,6 @@ import dev.tizu.hexcessible.Utils;
 import dev.tizu.hexcessible.entries.BookEntries;
 import dev.tizu.hexcessible.entries.PatternEntries;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class Escape implements SmartSig {
     public static final List<PatternEntries.Entry> ALL = List.of(
@@ -25,7 +24,7 @@ public class Escape implements SmartSig {
                 Text.translatable(desc).getString(), "", "", 0);
         var name = Text.translatable("hexcasting.rawhook.hexcasting:" + id)
                 .getString() + nameadd;
-        return new PatternEntries.Entry(Identifier.of("hexcessible", id), name,
+        return new PatternEntries.Entry("hexcessible:" + id, name,
                 () -> false, dir, List.of(Utils.angle(sig)), List.of(doc), 0);
     }
 

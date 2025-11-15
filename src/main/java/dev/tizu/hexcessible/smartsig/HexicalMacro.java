@@ -60,8 +60,7 @@ public class HexicalMacro implements SmartSig.Conditional {
 
     private PatternEntries.Entry getFor(List<HexAngle> sig) {
         var i18nkey = Text.translatable("hexcessible.smartsig.grimoire").getString();
-        return new PatternEntries.Entry(Identifier.of("hexical",
-                "grimoire_macro/" + Utils.angle(sig)), i18nkey, () -> false,
-                HexDir.EAST, List.of(sig), List.of(), 0);
+        return new PatternEntries.Entry("hexical:grimoire_macro/" + Utils.angle(sig),
+                i18nkey, () -> false, HexDir.EAST, List.of(sig), List.of(), 0);
     }
 }

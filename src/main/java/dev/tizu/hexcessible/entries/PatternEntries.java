@@ -23,8 +23,8 @@ public class PatternEntries {
     public static final PatternEntries INSTANCE = new PatternEntries();
 
     private List<Entry> entries = new ArrayList<>();
-    private List<Identifier> perWorld = new ArrayList<>();
-    private final Map<Identifier, List<HexAngle>> perWorldCache = new HashMap<>();
+    private List<String> perWorld = new ArrayList<>();
+    private final Map<String, List<HexAngle>> perWorldCache = new HashMap<>();
     private final Map<String, List<Entry>> fuzzySearchCache = new HashMap<>();
 
     private PatternEntries() {
@@ -52,9 +52,9 @@ public class PatternEntries {
             var impls = BookEntries.INSTANCE.get(id);
 
             if (entry.get().isIn(HexTags.Actions.PER_WORLD_PATTERN))
-                perWorld.add(id);
+                perWorld.add(id.toString());
 
-            entries.add(new Entry(id, name, checkLock, dir, sig, impls, 0));
+            entries.add(new Entry(id.toString(), name, checkLock, dir, sig, impls, 0));
         });
 
         invalidateCaches();
@@ -67,7 +67,7 @@ public class PatternEntries {
                 return;
             var id = Identifier.tryParse(knownEntry[1]);
             if (id != null)
-                perWorldCache.put(id, Utils.angle(knownEntry[2]));
+                perWorldCache.put(id.toString(), Utils.angle(knownEntry[2]));
         });
     }
 
@@ -148,7 +148,7 @@ public class PatternEntries {
         Hexcessible.LOGGER.info("Learned per-world pattern {}", entry.id());
     }
 
-    public static record Entry(Identifier id, String rawName, Supplier<Boolean> checkLock,
+    public static record Entry(String id, String rawName, Supplier<Boolean> checkLock,
             HexDir dir, List<List<HexAngle>> sig, List<BookEntries.Entry> impls, int z) {
         public boolean locked() {
             return checkLock.get();
@@ -156,12 +156,12 @@ public class PatternEntries {
 
         public String name() {
             if (isAliased())
-                return Hexcessible.cfg().patternAliases.get(id.toString());
+                return Hexcessible.cfg().patternAliases.get(id);
             return rawName;
         }
 
         public boolean isAliased() {
-            return Hexcessible.cfg().patternAliases.containsKey(id.toString());
+            return Hexcessible.cfg().patternAliases.containsKey(id);
         }
 
         public String toSignature() {

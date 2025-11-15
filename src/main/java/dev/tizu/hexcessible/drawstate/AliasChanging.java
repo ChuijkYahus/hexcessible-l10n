@@ -14,13 +14,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 public final class AliasChanging extends DrawState {
     private String alias;
     private final String original;
     private final String sig;
-    private final Identifier id;
+    private final String id;
 
     public AliasChanging(CastRef castref, PatternEntries.Entry entry) {
         super(castref);
@@ -73,7 +72,7 @@ public final class AliasChanging extends DrawState {
                 break;
             case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER, GLFW.GLFW_KEY_TAB:
                 var map = new HashMap<>(Hexcessible.cfg().patternAliases);
-                map.put(id.toString(), alias.isBlank() ? original : alias.trim());
+                map.put(id, alias.isBlank() ? original : alias.trim());
                 Hexcessible.cfg().patternAliases = map;
                 Hexcessible.cfg().markDirty();
                 requestExit();
