@@ -32,6 +32,8 @@ public class Number implements SmartSig {
         } catch (NumberFormatException e) {
             return null;
         }
+        if (num >= Integer.MAX_VALUE || num <= Integer.MIN_VALUE)
+            return null;
 
         var pattern = getFor(num);
         if (pattern == null)
