@@ -1,5 +1,6 @@
 package dev.tizu.hexcessible;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.petrak.hexcasting.api.casting.math.HexAngle;
@@ -37,6 +38,16 @@ public class Utils {
         if (!candidate.isEmpty() && candidate.toLowerCase().startsWith(q))
             score += 15;
         return qi == q.length() ? score : 0;
+    }
+
+    public static boolean isValidPattern(List<HexAngle> angles) {
+        var pat = new HexPattern(HexDir.EAST, new ArrayList<>());
+        for (var angle : angles) {
+            var dir = pat.finalDir();
+            if (!pat.tryAppendDir(dir.rotatedBy(angle)))
+                return false;
+        }
+        return true;
     }
 
     public static HexCoord finalPos(HexCoord start, HexPattern pattern) {
