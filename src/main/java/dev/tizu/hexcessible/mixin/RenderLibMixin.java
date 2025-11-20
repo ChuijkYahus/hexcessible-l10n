@@ -15,7 +15,6 @@ import net.minecraft.util.math.Vec2f;
 @Mixin(RenderLib.class)
 public class RenderLibMixin {
 
-    // mehhod A: straight lines
     @WrapMethod(method = "makeZappy", remap = false)
     private static List<Vec2f> prefersReducedZappiness(List<Vec2f> barePoints,
             Set<Integer> dupIndices, int hops, float variance, float speed,
@@ -27,12 +26,4 @@ public class RenderLibMixin {
                 flowIrregular, readabilityOffset, lastSegLenProp, seed);
     }
 
-    // method B: unanimated zapping
-    // @ModifyVariable(method = "makeZappy$zappify", at = @At("STORE"), name =
-    // "zSeed", remap = false)
-    private static double _prefersReducedZappiness(double seed) {
-        if (Hexcessible.cfg().prefersReducedMotion)
-            return 0;
-        return seed;
-    }
 }
