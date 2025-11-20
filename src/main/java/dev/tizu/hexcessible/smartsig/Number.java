@@ -14,7 +14,6 @@ import dev.tizu.hexcessible.Utils;
 import dev.tizu.hexcessible.entries.BookEntries;
 import dev.tizu.hexcessible.entries.PatternEntries;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class Number implements SmartSig {
     private static final DecimalFormat DF = new DecimalFormat("#.##");
