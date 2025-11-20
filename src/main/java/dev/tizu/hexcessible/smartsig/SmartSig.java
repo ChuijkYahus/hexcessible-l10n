@@ -69,6 +69,7 @@ public interface SmartSig {
             register(new OverevalSekhmet());
             register(new HexicalMacro());
             register(new HexThingsPatience());
+            register(new HexThingsIntrojection());
             // register(new ComplexhexLong());
         }
     }
