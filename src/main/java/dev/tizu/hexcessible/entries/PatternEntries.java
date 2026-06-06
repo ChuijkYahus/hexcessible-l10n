@@ -35,7 +35,7 @@ public class PatternEntries {
         entries.clear();
         perWorld.clear();
 
-        IXplatAbstractions.INSTANCE.getActionRegistry().getKeys().forEach(key -> {
+        IXplatAbstractions.INSTANCE.getActionRegistry().getKeys().forEach(key -> {        
             var item = IXplatAbstractions.INSTANCE.getActionRegistry().get(key);
             var entry = IXplatAbstractions.INSTANCE.getActionRegistry().getEntry(key);
 
@@ -102,6 +102,7 @@ public class PatternEntries {
                             .replaceAll("[:_/]", " "));
                     return Map.entry(e, score);
                 }).filter(e -> e.getValue() > 0)
+                // .filter(e -> !blacklist.contains(Identifier.of(e.getKey().id)))
                 .sorted((a, b) -> b.getValue() - a.getValue())
                 .map(Map.Entry::getKey)
                 .toList());

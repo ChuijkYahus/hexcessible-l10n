@@ -75,8 +75,9 @@ public class DrawStateMixin implements DrawStateMixinAccessor {
     }
 
     @Inject(at = @At("HEAD"), method = "mouseScrolled", cancellable = true)
-    private void mouseScrolled(double mx, double my, double delta, CallbackInfoReturnable<Boolean> info) {
-        if (state.onMouseScroll((int) delta))
+    private void mouseScrolled(double mx, double my, double deltaX, double deltaY,
+            CallbackInfoReturnable<Boolean> info) {
+        if (state.onMouseScroll((int) deltaY))
             info.setReturnValue(true);
     }
 

@@ -46,16 +46,18 @@ public class HexicalMacro implements SmartSig.Conditional {
 
         var targetItem = Registries.ITEM.get(Identifier.of("hexical", "grimoire"));
         var stacks = Stream.of(inventory.main, inventory.offHand, inventory.armor,
-                player.getEnderChestInventory().stacks)
+                player.getEnderChestInventory().heldStacks)
                 .flatMap(Collection::stream)
                 .filter(stack -> stack.isOf(targetItem))
                 .toList();
-        return stacks.stream()
-                .map(ItemStack::getNbt)
-                .filter(Objects::nonNull)
-                .map(nbt -> nbt.getCompound("expansions"))
-                .flatMap(nbt -> nbt.getKeys().stream())
-                .toList();
+        // return stacks.stream()
+        //         .map(ItemStack::getNbt)
+        //         .filter(Objects::nonNull)
+        //         .map(nbt -> nbt.getCompound("expansions"))
+        //         .flatMap(nbt -> nbt.getKeys().stream())
+        //         .toList();
+        // TODO: Hexical is not ported yet from what I can tell
+        return List.of();
     }
 
     private PatternEntries.Entry getFor(List<HexAngle> sig) {
